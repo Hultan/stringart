@@ -1,6 +1,6 @@
 # Introduction
 
-An attempt to make string art with raylib-go and golang. It didn't turn out to impressive, there is probably a bug somewhere.
+An attempt to make string art with raylib-go and golang. My image did not turn out as good as Patt:s, so there is probably a bug somewhere.
 
 Inspired by Patt Vira:s [String Art video](https://www.youtube.com/watch?v=qH7ZgQghKUU), where she used p5.js. See link below.
 
