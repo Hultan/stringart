@@ -18,7 +18,7 @@ const (
 
 var (
 	nails     = make([]rl.Vector2, nailCount)
-	lineIndex []int
+	lineIndex = make([]int, 0, maxLines)
 	col       []color.RGBA
 )
 
@@ -39,9 +39,6 @@ func main() {
 
 	startIndex := rand.Intn(nailCount)
 	lineIndex = append(lineIndex, startIndex)
-	lineIndex = append(lineIndex, startIndex-10)
-
-	fmt.Println(lineIndex)
 
 	rl.SetTargetFPS(60)
 
@@ -58,7 +55,7 @@ func main() {
 		for i := 1; i < len(lineIndex); i++ {
 			nail1 := nails[lineIndex[i-1]]
 			nail2 := nails[lineIndex[i]]
-			rl.DrawLineEx(nail1, nail2, 1, rl.Fade(rl.Black, 0.35))
+			rl.DrawLineEx(nail1, nail2, 0.5, rl.Fade(rl.Black, 0.25))
 		}
 
 		if len(lineIndex) < maxLines {
