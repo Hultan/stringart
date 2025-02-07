@@ -26,8 +26,8 @@ func main() {
 	rl.InitWindow(size, size, "String art")
 
 	img := rl.LoadImage("einstein.jpg")
-	col = rl.LoadImageColors(img)
 	tex := rl.LoadTextureFromImage(img)
+	col = rl.LoadImageColors(img)
 
 	for i := 0; i < nailCount; i++ {
 		angle := rl.Pi * 2 / float64(nailCount) * float64(i)
@@ -80,29 +80,6 @@ func main() {
 	rl.CloseWindow()
 }
 
-func updateImage(current, next int) {
-	nail1 := nails[current]
-	nail2 := nails[next]
-	steps := 100
-	bright := uint8(10)
-
-	for i := 0; i < steps; i++ {
-		l := float32(i) / float32(steps)
-		x := lerp(nail1.X, nail2.X, l)
-		y := lerp(nail1.Y, nail2.Y, l)
-		pixelIndex := int(x) + int(y)*size
-
-		if pixelIndex >= 0 && pixelIndex < len(col) {
-			if col[pixelIndex].R < 255 {
-				col[pixelIndex].R += bright
-				col[pixelIndex].G += bright
-				col[pixelIndex].B += bright
-			}
-		}
-	}
-
-}
-
 func findNextIndex(current int) (int, bool) {
 	next := -1
 	highestContrast := -1
@@ -133,17 +110,39 @@ func evaluateContrast(current, next int) int {
 	steps := 100
 
 	for i := 0; i < steps; i++ {
-		x := lerp(nail1.X, nail2.X, float32(i)/float32(steps))
-		y := lerp(nail1.Y, nail2.Y, float32(i)/float32(steps))
+		l := float32(i) / float32(steps)
+		x := lerp(nail1.X, nail2.X, l)
+		y := lerp(nail1.Y, nail2.Y, l)
 
 		if valid(x, y) {
 			pixelIndex := int(x) + int(y)*size
-			brightness := int(col[pixelIndex].R)
-			total += 255 - brightness
+			total += 255 - int(col[pixelIndex].R)
 		}
 	}
 
 	return total / steps
+}
+
+func updateImage(current, next int) {
+	nail1 := nails[current]
+	nail2 := nails[next]
+	steps := 100
+	bright := uint8(10)
+
+	for i := 0; i < steps; i++ {
+		l := float32(i) / float32(steps)
+		x := lerp(nail1.X, nail2.X, l)
+		y := lerp(nail1.Y, nail2.Y, l)
+		pixelIndex := int(x) + int(y)*size
+
+		if pixelIndex >= 0 && pixelIndex < len(col) {
+			if col[pixelIndex].R < 255 {
+				col[pixelIndex].R += bright
+				col[pixelIndex].G += bright
+				col[pixelIndex].B += bright
+			}
+		}
+	}
 }
 
 func valid(x float32, y float32) bool {
